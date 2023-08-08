@@ -3,6 +3,7 @@ package com.RoomFour.FinancialPortfolio.Commodity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +18,10 @@ public class CommodityService {
 
     public Commodity addCommodity(Commodity c){
         // add validation steps and return null if fails
-        if (!c.getTicker().matches("[A-Z]$")) return null;
+        if (!c.getTicker().matches("[A-Z]*")) return null;
         if(c.getPricePerUnit() == 0) return null;
         if(c.getQty() == 0) return null;
-        c.setBuyDate(new Date());
+        c.setBuyDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         return commodityRepository.save(c);
     }
 

@@ -12,9 +12,7 @@ public class Commodity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String ticker;
-    private Date buyDate;
-    private Date sellDate;
+    private String ticker, buyDate, sellDate;
 
     public long getId() {
         return id;
@@ -24,26 +22,29 @@ public class Commodity {
         this.id = id;
     }
 
-    public Date getBuyDate() {
+    public String getBuyDate() {
         return buyDate;
     }
 
-    public void setBuyDate(Date buyDate) {
+    public void setBuyDate(String buyDate) {
         this.buyDate = buyDate;
     }
 
-    public Date getSellDate() {
+    public String getSellDate() {
         return sellDate;
     }
 
-    public void setSellDate(Date sellDate) {
+    public void setSellDate(String sellDate) {
         this.sellDate = sellDate;
     }
 
     private double pricePerUnit;
     private int qty;
 
-    public Commodity() {}
+    public Commodity() {
+        this.buyDate = "";
+        this.sellDate = "";
+    }
 
     public String getTicker() {
         return ticker;
@@ -70,7 +71,7 @@ public class Commodity {
         this.qty = qty;
     }
 
-    public Commodity(long id, String ticker, Date buyDate, Date sellDate, double pricePerUnit, int qty) {
+    public Commodity(long id, String ticker, String buyDate, String sellDate, double pricePerUnit, int qty) {
         this.id = id;
         this.ticker = ticker;
         this.buyDate = buyDate;
@@ -82,8 +83,8 @@ public class Commodity {
     public Commodity set(Commodity c){
         if(c.getTicker() != null) this.setTicker(c.getTicker());
         if(c.getQty() != 0) this.setQty(c.getQty());
-        if(c.getBuyDate() != null) this.setBuyDate(c.getBuyDate());
-        if(c.getSellDate() != null) this.setSellDate(c.getSellDate());
+        if(c.getBuyDate() != null && !c.getBuyDate().isEmpty() && !c.getBuyDate().isBlank()) this.setBuyDate(c.getBuyDate());
+        if(c.getSellDate() != null && !c.getSellDate().isEmpty() && !c.getSellDate().isBlank()) this.setSellDate(c.getSellDate());
         if(c.getPricePerUnit() != 0) this.setPricePerUnit(c.getPricePerUnit());
         return this;
     }
