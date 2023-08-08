@@ -38,8 +38,7 @@ public class CommodityService {
         return commodityRepository.findByTicker(ticker);
     }
 
-    public List<Commodity> bulkAdd(List<Commodity> cList){
-      return (List<Commodity>)commodityRepository.saveAll(cList);
-    }
 
+//    public List<Commodity> bulkAdd(List<Commodity> cList){
+//    }
 }
