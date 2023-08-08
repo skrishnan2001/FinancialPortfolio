@@ -5,14 +5,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.util.Date;
-
 @Entity
 public class Commodity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String ticker, buyDate, sellDate;
+
+    double profit;
 
     public long getId() {
         return id;
@@ -38,12 +38,21 @@ public class Commodity {
         this.sellDate = sellDate;
     }
 
+    public double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(double profit) {
+        this.profit = profit;
+    }
+
     private double pricePerUnit;
     private int qty;
 
     public Commodity() {
         this.buyDate = "";
         this.sellDate = "";
+        this.profit = 0.0;
     }
 
     public String getTicker() {
@@ -71,13 +80,14 @@ public class Commodity {
         this.qty = qty;
     }
 
-    public Commodity(long id, String ticker, String buyDate, String sellDate, double pricePerUnit, int qty) {
+    public Commodity(long id, String ticker, String buyDate, String sellDate, double pricePerUnit, int qty, double profit) {
         this.id = id;
         this.ticker = ticker;
         this.buyDate = buyDate;
         this.sellDate = sellDate;
         this.pricePerUnit = pricePerUnit;
         this.qty = qty;
+        this.profit = profit;
     }
 
     public Commodity set(Commodity c){

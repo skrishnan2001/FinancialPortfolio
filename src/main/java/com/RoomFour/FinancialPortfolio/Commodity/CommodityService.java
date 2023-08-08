@@ -33,7 +33,10 @@ public class CommodityService {
 
     public Commodity deleteCommodity(long id){
         Commodity c_ = commodityRepository.findById(id).orElseGet(()->null);
-        if (c_ != null) commodityRepository.delete(c_);
+        if (c_ != null) {
+            c_.setSellDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+            //c_.setProfit();
+        }
         return c_;
     }
     public List<Commodity> getAll() {
@@ -68,4 +71,6 @@ public class CommodityService {
         }
         return totalInvestmentMap;
     }
+
+
 }
