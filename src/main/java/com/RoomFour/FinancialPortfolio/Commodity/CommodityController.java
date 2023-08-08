@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/portfolio")
@@ -34,4 +35,15 @@ public class CommodityController {
         if (deletedCommodity == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(deletedCommodity, HttpStatus.OK);
     }
+    @GetMapping
+    public List<Commodity> getAll() {
+
+        return commodityService.getAll();
+    }
+
+    @GetMapping("/getByTicker/{ticker}")
+    public List<Commodity> getByTicker(@RequestParam String ticker) {
+        return commodityService.getByTicker(ticker);
+    }
+
 }

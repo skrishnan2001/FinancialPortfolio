@@ -3,6 +3,8 @@ package com.RoomFour.FinancialPortfolio.Commodity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommodityService {
     private CommodityRepository commodityRepository;
@@ -27,4 +29,13 @@ public class CommodityService {
         if (c_ != null) commodityRepository.delete(c_);
         return c_;
     }
+    public List<Commodity> getAll() {
+        return commodityRepository.findAll();
+    }
+
+    public List<Commodity> getByTicker(String ticker) {
+
+        return commodityRepository.findByTicker(ticker);
+    }
+
 }
