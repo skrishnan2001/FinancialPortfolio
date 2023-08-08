@@ -1,5 +1,7 @@
 package com.RoomFour.FinancialPortfolio.Commodity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,18 @@ import java.util.HashMap;
 @Service
 public class CommodityService {
     private CommodityRepository commodityRepository;
+    private Map<String, Double> priceMap;
     @Autowired
     public CommodityService(CommodityRepository commodityRepository) {
         this.commodityRepository = commodityRepository;
+        JSONArray jsonArray = new JSONArray("<placeholder>");
+        priceMap = new HashMap<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject stockObject = jsonArray.getJSONObject(i);
+            String symbol = stockObject.getString("Symbol");
+            double currentPrice = stockObject.getDouble("currentPrice");
+            priceMap.put(symbol, currentPrice);
+        }
     }
 
     public Commodity addCommodity(Commodity c){
@@ -35,7 +46,7 @@ public class CommodityService {
         Commodity c_ = commodityRepository.findById(id).orElseGet(()->null);
         if (c_ != null) {
             c_.setSellDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-            //c_.setProfit();
+            c_.setProfit((c_.getPricePerUnit() * c_.getQty()) - (priceMap.get(c_.getTicker()) * c_.getQty()));
         }
         return c_;
     }
