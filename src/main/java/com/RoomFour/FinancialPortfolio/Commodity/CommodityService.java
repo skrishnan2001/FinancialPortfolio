@@ -5,6 +5,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +19,16 @@ public class CommodityService {
     private CommodityRepository commodityRepository;
     private Map<String, Double> priceMap;
     @Autowired
-    public CommodityService(CommodityRepository commodityRepository) {
+    public CommodityService(CommodityRepository commodityRepository) throws IOException {
         this.commodityRepository = commodityRepository;
-        JSONArray jsonArray = new JSONArray("<placeholder>");
+        BufferedReader r = new BufferedReader(new FileReader("C:\\Users\\Administrator\\Documents\\Neueda\\Spring\\FinancialPortfolio\\src\\main\\java\\com\\RoomFour\\FinancialPortfolio\\Data\\CurrentPrice.json"));
+        StringBuilder s = new StringBuilder();
+        String line;
+        while((line = r.readLine()) != null) {
+            s.append(line);
+        }
+
+        JSONArray jsonArray = new JSONArray(s.toString());
         priceMap = new HashMap<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject stockObject = jsonArray.getJSONObject(i);
@@ -46,7 +57,7 @@ public class CommodityService {
         Commodity c_ = commodityRepository.findById(id).orElseGet(()->null);
         if (c_ != null) {
             c_.setSellDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-            c_.setProfit((c_.getPricePerUnit() * c_.getQty()) - (priceMap.get(c_.getTicker()) * c_.getQty()));
+            c_.setProfit(-(c_.getPricePerUnit() * c_.getQty()) + (priceMap.get(c_.getTicker()) * c_.getQty()));
         }
         return c_;
     }
