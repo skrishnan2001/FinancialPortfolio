@@ -5,12 +5,41 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Date;
+
 @Entity
 public class Commodity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String ticker, buyDate, sellDate;
+    private String ticker;
+    private Date buyDate;
+    private Date sellDate;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getBuyDate() {
+        return buyDate;
+    }
+
+    public void setBuyDate(Date buyDate) {
+        this.buyDate = buyDate;
+    }
+
+    public Date getSellDate() {
+        return sellDate;
+    }
+
+    public void setSellDate(Date sellDate) {
+        this.sellDate = sellDate;
+    }
+
     private double pricePerUnit;
     private int qty;
 
@@ -24,21 +53,6 @@ public class Commodity {
         this.ticker = ticker;
     }
 
-    public String getBuyDate() {
-        return buyDate;
-    }
-
-    public void setBuyDate(String buyDate) {
-        this.buyDate = buyDate;
-    }
-
-    public String getSellDate() {
-        return sellDate;
-    }
-
-    public void setSellDate(String sellDate) {
-        this.sellDate = sellDate;
-    }
 
     public double getPricePerUnit() {
         return pricePerUnit;
@@ -56,7 +70,8 @@ public class Commodity {
         this.qty = qty;
     }
 
-    public Commodity(String ticker, String buyDate, String sellDate, double pricePerUnit, int qty) {
+    public Commodity(long id, String ticker, Date buyDate, Date sellDate, double pricePerUnit, int qty) {
+        this.id = id;
         this.ticker = ticker;
         this.buyDate = buyDate;
         this.sellDate = sellDate;

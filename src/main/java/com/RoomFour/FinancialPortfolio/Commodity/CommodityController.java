@@ -37,12 +37,11 @@ public class CommodityController {
     }
     @GetMapping
     public List<Commodity> getAll() {
-
         return commodityService.getAll();
     }
 
     @GetMapping("/getByTicker/{ticker}")
-    public List<Commodity> getByTicker(@RequestParam String ticker) {
+    public List<Commodity> getByTicker(@PathVariable String ticker) {
         return commodityService.getByTicker(ticker);
     }
 
