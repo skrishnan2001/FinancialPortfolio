@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+import java.util.Map;
 @RestController
 @RequestMapping("/portfolio")
 public class CommodityController {
@@ -37,7 +37,6 @@ public class CommodityController {
     }
     @GetMapping
     public List<Commodity> getAll() {
-
         return commodityService.getAll();
     }
 
@@ -51,4 +50,9 @@ public class CommodityController {
         return commodityService.bulkAdd(cList);
     }
 
+//total-investment
+@GetMapping("/getTotalInvestment/{ticker}")
+public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
+    return commodityService.getTotalInvestmentForAllTickerSymbols();
+}
 }
