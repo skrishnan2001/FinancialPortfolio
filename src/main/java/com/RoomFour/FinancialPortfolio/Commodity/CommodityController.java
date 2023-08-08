@@ -52,7 +52,7 @@ public class CommodityController {
     }
 
 //total-investment
-@GetMapping("/commodity/totalInvestment")
+@GetMapping("/getTotalInvestment/{ticker}")
 public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
     return commodityService.getTotalInvestmentForAllTickerSymbols();
 }
