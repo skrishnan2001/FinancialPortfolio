@@ -7,4 +7,5 @@ import java.util.List;
 @Repository
 public interface CommodityRepository extends CrudRepository<Commodity,Long> {
     List<Commodity> findAll();
+    List<Commodity> findByTicker(String ticker);
 }
