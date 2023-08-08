@@ -63,4 +63,13 @@ public class Commodity {
         this.pricePerUnit = pricePerUnit;
         this.qty = qty;
     }
+
+    public Commodity set(Commodity c){
+        if(c.getTicker() != null) this.setTicker(c.getTicker());
+        if(c.getQty() != 0) this.setQty(c.getQty());
+        if(c.getBuyDate() != null) this.setBuyDate(c.getBuyDate());
+        if(c.getSellDate() != null) this.setSellDate(c.getSellDate());
+        if(c.getPricePerUnit() != 0) this.setPricePerUnit(c.getPricePerUnit());
+        return this;
+    }
 }
