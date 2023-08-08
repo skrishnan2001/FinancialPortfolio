@@ -8,4 +8,6 @@ import java.util.List;
 public interface CommodityRepository extends CrudRepository<Commodity,Long> {
     List<Commodity> findAll();
     List<Commodity> findByTicker(String ticker);
+
+    List<Commodity> saveAll(List<Commodity> cList);
 }
