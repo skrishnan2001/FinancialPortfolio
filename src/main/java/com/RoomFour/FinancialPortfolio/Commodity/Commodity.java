@@ -1,6 +1,15 @@
 package com.RoomFour.FinancialPortfolio.Commodity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Commodity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String ticker, buyDate, sellDate;
     private double pricePerUnit;
     private int qty;
