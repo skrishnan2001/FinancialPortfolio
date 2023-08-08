@@ -72,4 +72,5 @@ public class Commodity {
         if(c.getPricePerUnit() != 0) this.setPricePerUnit(c.getPricePerUnit());
         return this;
     }
+
 }
