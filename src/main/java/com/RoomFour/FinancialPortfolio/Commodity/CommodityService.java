@@ -39,6 +39,7 @@ public class CommodityService {
     }
 
 
-//    public List<Commodity> bulkAdd(List<Commodity> cList){
-//    }
+    public List<Commodity> bulkAdd(List<Commodity> cList){
+        return (List<Commodity>)commodityRepository.saveAll(cList);
+    }
 }

@@ -46,10 +46,9 @@ public class CommodityController {
         return commodityService.getByTicker(ticker);
     }
 
-    //DOES NOT WORK
-//    @PostMapping("/bulPost")
-//    public List<Commodity> bulkAdd(@RequestBody List<Commodity> cList){
-//        return commodityService.bulkAdd(cList);
-//    }
+    @PostMapping("/bulkPost")
+    public List<Commodity> bulkAdd(@RequestBody List<Commodity> cList){
+        return commodityService.bulkAdd(cList);
+    }
 
 }
