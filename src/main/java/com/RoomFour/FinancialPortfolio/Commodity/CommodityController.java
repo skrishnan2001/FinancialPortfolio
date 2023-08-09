@@ -50,9 +50,9 @@ public class CommodityController {
         return commodityService.bulkAdd(cList);
     }
 
-//total-investment
-@GetMapping("/getTotalInvestment/{ticker}")
-public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
-    return commodityService.getTotalInvestmentForAllTickerSymbols();
-}
+    //total-investment
+    @GetMapping("/getTotalInvestment/{ticker}")
+    public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
+        return commodityService.getTotalInvestmentForAllTickerSymbols();
+    }
 }
