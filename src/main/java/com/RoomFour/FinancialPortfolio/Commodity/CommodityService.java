@@ -16,6 +16,9 @@ import java.util.*;
 public class CommodityService {
     private CommodityRepository commodityRepository;
     private Map<String, Double> priceMap;
+
+    private Map<String, Double> totalInvestmentMap;
+    private double totalInv = 0.0;
     @Autowired
     public CommodityService(CommodityRepository commodityRepository) throws IOException {
         this.commodityRepository = commodityRepository;
@@ -33,6 +36,13 @@ public class CommodityService {
             String symbol = stockObject.getString("Symbol");
             double currentPrice = stockObject.getDouble("currentPrice");
             priceMap.put(symbol, currentPrice);
+        }
+
+        List<Commodity> stocks = commodityRepository.findAll();
+        totalInvestmentMap = new HashMap<>();
+        for (Commodity stock : stocks) {
+            totalInvestmentMap.put(stock.getTicker(),calculateTotalInvestment(stock.getTicker()));
+            totalInv += stock.getPricePerUnit() * stock.getQty();
         }
     }
 
@@ -84,16 +94,8 @@ public class CommodityService {
         }
         return totalInvestment;
     }
-    public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
-        List<Commodity> stocks = commodityRepository.findAll();
-        Map<String, Double> totalInvestmentMap = new HashMap<>();
-        double total = 0;
-        for (Commodity stock : stocks) {
-            total += stock.getPricePerUnit() * stock.getQty();
-            totalInvestmentMap.put(stock.getTicker(),calculateTotalInvestment(stock.getTicker()));
-        }
+    public Map<String, Double> getTotalInvestmentByTicker() {
 
-        totalInvestmentMap.put("Total", total);
         return totalInvestmentMap;
     }
 
@@ -130,6 +132,11 @@ public class CommodityService {
         }
         return totalPotentialProfitsMap;
     }
+
+    public double getTotalInvestment() {
+        return totalInv;
+    }
+
     public double getTotalProfits() {
         List<Commodity> allStocks = commodityRepository.findAll();
         double totalProfit=0;
@@ -163,5 +170,29 @@ public class CommodityService {
             topK.add(top.get(i));
 
         return topK;
+    }
+
+    public List<Pair> getWorstK(int k) {
+        List<Commodity> cList = commodityRepository.findAll();
+
+        List<Pair> worst = new ArrayList<>();
+        Map<String, Double> potentialProfitsMap = getPotentialProfitsByTicker();
+
+        for(Commodity stock : cList) {
+            if(stock.getSellDate().isEmpty() || stock.getSellDate().isBlank()) {
+                worst.add(new Pair(stock, potentialProfitsMap.get(stock.getTicker())));
+            }
+
+        }
+
+        Collections.sort(worst, (a, b) -> {
+            return Double.compare(a.potentialProfits, b.potentialProfits);
+        });
+
+        List<Pair> worstK = new ArrayList<>();
+        for(int i = 0; i < k; i++)
+            worstK.add(worst.get(i));
+
+        return worstK;
     }
 }
