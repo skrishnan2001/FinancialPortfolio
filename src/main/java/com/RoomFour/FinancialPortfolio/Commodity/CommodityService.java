@@ -17,8 +17,6 @@ public class CommodityService {
     private CommodityRepository commodityRepository;
     private Map<String, Double> priceMap;
 
-    private Map<String, Double> totalInvestmentMap;
-    private double totalInv = 0.0;
     @Autowired
     public CommodityService(CommodityRepository commodityRepository) throws IOException {
         this.commodityRepository = commodityRepository;
@@ -36,13 +34,6 @@ public class CommodityService {
             String symbol = stockObject.getString("Symbol");
             double currentPrice = stockObject.getDouble("currentPrice");
             priceMap.put(symbol, currentPrice);
-        }
-
-        List<Commodity> stocks = commodityRepository.findAll();
-        totalInvestmentMap = new HashMap<>();
-        for (Commodity stock : stocks) {
-            totalInvestmentMap.put(stock.getTicker(),calculateTotalInvestment(stock.getTicker()));
-            totalInv += stock.getPricePerUnit() * stock.getQty();
         }
     }
 
@@ -95,7 +86,11 @@ public class CommodityService {
         return totalInvestment;
     }
     public Map<String, Double> getTotalInvestmentByTicker() {
-
+        List<Commodity> stocks = commodityRepository.findAll();
+        Map<String, Double> totalInvestmentMap = new HashMap<>();
+        for (Commodity stock : stocks) {
+            totalInvestmentMap.put(stock.getTicker(),calculateTotalInvestment(stock.getTicker()));
+        }
         return totalInvestmentMap;
     }
 
@@ -134,6 +129,11 @@ public class CommodityService {
     }
 
     public double getTotalInvestment() {
+        double totalInv = 0;
+        List<Commodity> stocks = commodityRepository.findAll();
+        for (Commodity stock : stocks) {
+            totalInv += stock.getPricePerUnit() * stock.getQty();
+        }
         return totalInv;
     }
 
