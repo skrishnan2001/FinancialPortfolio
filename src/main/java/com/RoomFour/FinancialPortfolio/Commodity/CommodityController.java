@@ -73,4 +73,9 @@ public class CommodityController {
     public List<Pair> getTopK(@PathVariable int k) {
         return commodityService.getTopK(k);
     }
+
+    @GetMapping("/getPotentialProfitsByTicker")
+    public Map<String, Double> getPotentialProfitsByTicker(){
+        return commodityService.getPotentialProfitsByTicker();
+    }
 }
