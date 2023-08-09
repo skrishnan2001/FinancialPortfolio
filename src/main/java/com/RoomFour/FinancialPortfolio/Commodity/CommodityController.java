@@ -57,7 +57,15 @@ public class CommodityController {
     }
 
     @GetMapping("/getCurrentPosition")
-    public double getCurrentPosition(){
+    public double getCurrentPosition() {
         return commodityService.getCurrentPosition();
+    }
+    @GetMapping("/getProfitsByTicker")
+    public Map<String, Double> getProfitsByTicker() {
+        return commodityService.getProfitsByTicker();
+    }
+    @GetMapping("/getTotalProfits")
+    public double getTotalProfits() {
+        return commodityService.getTotalProfits();
     }
 }
