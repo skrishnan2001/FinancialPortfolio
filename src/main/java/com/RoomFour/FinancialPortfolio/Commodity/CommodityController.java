@@ -51,8 +51,8 @@ public class CommodityController {
     }
 
     //total-investment
-    @GetMapping("/getTotalInvestment")
-    public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
+    @GetMapping("/getTotalInvestmentByTicker")
+    public Map<String, Double> getTotalInvestmentByTicker() {
         return commodityService.getTotalInvestmentByTicker();
     }
 
@@ -82,5 +82,10 @@ public class CommodityController {
     @GetMapping("/getPotentialProfitsByTicker")
     public Map<String, Double> getPotentialProfitsByTicker(){
         return commodityService.getPotentialProfitsByTicker();
+    }
+
+    @GetMapping("/getTotalInvestment")
+    public double getTotalInvestment() {
+        return commodityService.getTotalInvestment();
     }
 }
