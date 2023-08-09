@@ -55,4 +55,9 @@ public class CommodityController {
     public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
         return commodityService.getTotalInvestmentForAllTickerSymbols();
     }
+
+    @GetMapping("/getCurrentPosition")
+    public double getCurrentPosition(){
+        return commodityService.getCurrentPosition();
+    }
 }

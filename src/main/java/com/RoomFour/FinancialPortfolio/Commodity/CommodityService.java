@@ -95,5 +95,13 @@ public class CommodityService {
         return totalInvestmentMap;
     }
 
+    public double getCurrentPosition(){
+        double currentPosition = 0;
+        List<Commodity> cList = commodityRepository.findAll();
+        for (Commodity s : cList){
+            currentPosition += (priceMap.get(s.getTicker()) * s.getQty()) - (s.getPricePerUnit() * s.getQty());
+        }
+        return currentPosition;
+    }
 
 }
