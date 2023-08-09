@@ -10,10 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
+
 @Service
 public class CommodityService {
     private CommodityRepository commodityRepository;
@@ -57,7 +55,7 @@ public class CommodityService {
         Commodity c_ = commodityRepository.findById(id).orElseGet(()->null);
         if (c_ != null && (c_.getSellDate().isBlank() || c_.getSellDate().isEmpty())) {
             c_.setSellDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-            c_.setProfit(-(c_.getPricePerUnit() * c_.getQty()) + (priceMap.get(c_.getTicker()) * c_.getQty()));
+            c_.setProfit(-(c_.getPricePerUnit() * c_.getQty()) + (priceMap.getOrDefault(c_.getTicker(), 0.0) * c_.getQty()));
             commodityRepository.save(c_);
         }
         return c_;
@@ -89,9 +87,13 @@ public class CommodityService {
     public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
         List<Commodity> stocks = commodityRepository.findAll();
         Map<String, Double> totalInvestmentMap = new HashMap<>();
+        double total = 0;
         for (Commodity stock : stocks) {
+            total += stock.getPricePerUnit() * stock.getQty();
             totalInvestmentMap.put(stock.getTicker(),calculateTotalInvestment(stock.getTicker()));
         }
+
+        totalInvestmentMap.put("Total", total);
         return totalInvestmentMap;
     }
 
@@ -99,7 +101,7 @@ public class CommodityService {
         double currentPosition = 0;
         List<Commodity> cList = commodityRepository.findAll();
         for (Commodity s : cList){
-            currentPosition += (priceMap.get(s.getTicker()) * s.getQty()) - (s.getPricePerUnit() * s.getQty());
+            currentPosition += (priceMap.getOrDefault(s.getTicker(), 0.0) * s.getQty()) - (s.getPricePerUnit() * s.getQty());
         }
         return currentPosition;
     }
@@ -109,10 +111,24 @@ public class CommodityService {
         Map<String, Double> totalProfitsMap = new HashMap<>();
         for (Commodity stock : allStocks) {
             if(!stock.getSellDate().isEmpty() ||!stock.getSellDate().isBlank()) {
-                totalProfitsMap.put(stock.getTicker(), stock.getProfit());
+                String ticker = stock.getTicker();
+                totalProfitsMap.put(ticker, totalProfitsMap.getOrDefault(ticker, 0.0) + stock.getProfit());
             }
         }
         return totalProfitsMap;
+    }
+
+    public Map<String, Double> getPotentialProfitsByTicker() {
+        List<Commodity> allStocks = commodityRepository.findAll();
+        Map<String, Double> totalPotentialProfitsMap = new HashMap<>();
+        for (Commodity stock : allStocks) {
+            if(stock.getSellDate().isEmpty() || stock.getSellDate().isBlank()) {
+                String ticker = stock.getTicker();
+                double potentialProfit = totalPotentialProfitsMap.getOrDefault(ticker, 0.0) + (priceMap.getOrDefault(ticker, 0.0) - stock.getPricePerUnit()) * stock.getQty();
+                totalPotentialProfitsMap.put(ticker, potentialProfit);
+            }
+        }
+        return totalPotentialProfitsMap;
     }
     public double getTotalProfits() {
         List<Commodity> allStocks = commodityRepository.findAll();
@@ -124,5 +140,28 @@ public class CommodityService {
             }
         }
         return totalProfit;
+    }
+
+    public List<Pair> getTopK(int k) {
+        List<Commodity> cList = commodityRepository.findAll();
+
+        List<Pair> top = new ArrayList<>();
+        Map<String, Double> potentialProfitsMap = getPotentialProfitsByTicker();
+
+        for(Commodity stock : cList) {
+            if(stock.getSellDate().isEmpty() || stock.getSellDate().isBlank()) {
+                top.add(new Pair(stock, potentialProfitsMap.get(stock.getTicker())));
+            }
+        }
+
+        Collections.sort(top, (a, b) -> {
+            return Double.compare(b.potentialProfits, a.potentialProfits);
+        });
+
+        List<Pair> topK = new ArrayList<>();
+        for(int i = 0; i < k; i++)
+            topK.add(top.get(i));
+
+        return topK;
     }
 }

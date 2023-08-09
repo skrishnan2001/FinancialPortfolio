@@ -68,4 +68,9 @@ public class CommodityController {
     public double getTotalProfits() {
         return commodityService.getTotalProfits();
     }
+
+    @GetMapping("/getTopK/{k}")
+    public List<Pair> getTopK(@PathVariable int k) {
+        return commodityService.getTopK(k);
+    }
 }
