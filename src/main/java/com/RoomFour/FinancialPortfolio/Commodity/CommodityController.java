@@ -55,4 +55,12 @@ public class CommodityController {
     public Map<String, Double> getTotalInvestmentForAllTickerSymbols() {
         return commodityService.getTotalInvestmentForAllTickerSymbols();
     }
+    @GetMapping("/profitsByTicker")
+    public Map<String, Double> getProfitsByTicker() {
+        return commodityService.getProfitsByTicker();
+    }
+    @GetMapping("/getTotalProfits")
+    public double getTotalProfits() {
+        return commodityService.getTotalProfits();
+    }
 }

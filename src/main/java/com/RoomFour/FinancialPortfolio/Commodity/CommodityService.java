@@ -94,6 +94,25 @@ public class CommodityService {
         }
         return totalInvestmentMap;
     }
-
-
+    public Map<String, Double> getProfitsByTicker() {
+        List<Commodity> allStocks = commodityRepository.findAll();
+        Map<String, Double> totalProfitsMap = new HashMap<>();
+        for (Commodity stock : allStocks) {
+            if(!stock.getSellDate().isEmpty() ||!stock.getSellDate().isBlank()) {
+                totalProfitsMap.put(stock.getTicker(), stock.getProfit());
+            }
+        }
+        return totalProfitsMap;
+    }
+    public double getTotalProfits() {
+        List<Commodity> allStocks = commodityRepository.findAll();
+        double totalProfit=0;
+       // Map<String, Double> totalProfitsMap = new HashMap<>();
+        for (Commodity stock : allStocks) {
+            if(!stock.getSellDate().isEmpty() ||!stock.getSellDate().isBlank()) {
+                totalProfit=stock.getProfit();
+            }
+        }
+        return totalProfit;
+    }
 }
